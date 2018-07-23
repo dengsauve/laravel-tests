@@ -25,15 +25,21 @@ class Team extends Model
         }
     }
 
-    public function remove($user)
+    public function remove($users)
     {
-        $user->team_id = 0;
-        $user->save();
+        if ($users instanceof User) {
+            return $users->leaveTeam();
+        }
+
+        $userIds = array_column($users, 'id');
+        $this->members()
+            ->whereIn('id', $userIds)
+            ->update(['team_id' => null]);
     }
 
     public function dropAll()
     {
-        $this->members()->delete();
+        $this->members()->update(['team_id' => null]);
     }
 
     public function members()

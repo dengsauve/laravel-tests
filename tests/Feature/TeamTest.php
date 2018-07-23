@@ -70,6 +70,22 @@ class TeamTest extends TestCase
         $this->assertEquals(1, $team->count());
     }
 
+    public function testItCanRemoveMultipleMembers()
+    {
+        $team = factory(Team::class)->create();
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+        $user3 = factory(User::class)->create();
+
+        $team->add($user);
+        $team->add($user2);
+        $team->add($user3);
+
+        $team->remove([$user, $user2]);
+
+        $this->assertEquals(1, $team->count());
+    }
+
     public function testItCanDropAllMembers()
     {
         $team = factory(Team::class)->create();
